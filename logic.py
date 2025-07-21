@@ -17,13 +17,25 @@ def aggregate():
     records = fetch_all()
     amounts = [r[3] for r in records]
     vendors = [r[1] for r in records]
+    categories = [r[4] for r in records]  # r[4] = category
+
+    # Vendor frequency
+    vendor_freq = {v: vendors.count(v) for v in set(vendors)}
+
+    # Category-wise spend totals
+    category_totals = {}
+    for i, category in enumerate(categories):
+        category_totals[category] = category_totals.get(category, 0) + amounts[i]
+
     return {
         "total": sum(amounts),
         "mean": statistics.mean(amounts) if amounts else 0,
         "median": statistics.median(amounts) if amounts else 0,
         "mode": statistics.mode(amounts) if amounts else 0,
-        "vendor_freq": {v: vendors.count(v) for v in set(vendors)}
+        "vendor_freq": vendor_freq,
+        "category_totals": category_totals  # 👈 new field
     }
+
 
 def get_monthly_trend():
     rows = fetch_all()
