@@ -10,13 +10,18 @@ from parser import map_category
 
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
 CATEGORIES = [
     "All", "Shopping", "Groceries", "Food & Delivery", "Electricity",
     "Internet & Mobile", "Transportation", "Entertainment", "Hotels & Travel",
     "Healthcare & Medical", "Education", "Finance & Payments", "Fuel", "Misc"
 ]
+
+CURRENCIES = ["INR", "USD", "EUR", "GBP", "Unknown"]
+
 init_db()
-st.title("📁 BillInsight: Spend Analyzer")
+
+st.title(" BillInsight: Spend Analyzer")
 
 file = st.file_uploader("Upload receipt (.jpg/.png/.pdf/.txt)", type=["jpg", "png", "pdf", "txt"])
 if file:
@@ -27,10 +32,9 @@ if file:
     vendor = st.text_input("Vendor", receipt.vendor)
     date = st.text_input("Date", receipt.date)
     amount = st.number_input("Amount", value=receipt.amount)
-    category = st.text_input("Category", receipt.category)
-    currency = st.text_input("Currency", receipt.currency)
-    
-
+    category = st.selectbox("Category", CATEGORIES, index=CATEGORIES.index(receipt.category) if receipt.category in CATEGORIES else len(CATEGORIES)-1)
+    currency = st.selectbox("Currency", CURRENCIES, index=CURRENCIES.index(receipt.currency) if receipt.currency in CURRENCIES else len(CURRENCIES)-1)
+   
     receipt.vendor = vendor
     receipt.date = date
     receipt.amount = amount
@@ -46,14 +50,14 @@ if file:
 st.subheader("📊 Records")
 if st.checkbox("Show All"):
     data = fetch_all()
-    df = pd.DataFrame(data, columns=["ID", "Vendor", "Date", "Amount", "Category", "Currency"])
+    df = pd.DataFrame(data, columns=["ID", "Vendor", "Date", "Amount", "Category"])
     st.dataframe(df, use_container_width=True)
 
-selected_category = st.selectbox(" Filter by Category", CATEGORIES)
-
-if selected_category and selected_category != "All":
-    records = [r for r in fetch_all() if r[4] == selected_category]
-    st.dataframe(pd.DataFrame(records, columns=["ID", "Vendor", "Date", "Amount", "Category"]))
+st.subheader("🔎 Search & Filter")
+q = st.text_input("Vendor search")
+if q:
+    result = search(q)
+    st.dataframe(pd.DataFrame(result, columns=["ID", "Vendor", "Date", "Amount", "Category"]))
 
 min_amt = st.number_input("Min Amount", 0.0)
 max_amt = st.number_input("Max Amount", 10000.0)
