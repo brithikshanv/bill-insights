@@ -6,3 +6,4 @@ class Receipt(BaseModel):
     date: str
     amount: float
     category: Optional[str] = "Misc"
+    currency: Optional[str] = "INR"  
