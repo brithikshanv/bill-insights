@@ -39,7 +39,7 @@ def aggregate():
 
 def get_monthly_trend():
     rows = fetch_all()
-    df = pd.DataFrame(rows, columns=["id", "vendor", "date", "amount", "category"])
+    df = pd.DataFrame(rows, columns=["id", "vendor", "date", "amount", "category", "currency"])
     df['date'] = pd.to_datetime(df['date'], errors='coerce')
     df = df.dropna()
     df['month'] = df['date'].dt.to_period('M').astype(str)
@@ -58,3 +58,4 @@ def get_monthly_summary():
         'ID': 'count'
     }).rename(columns={'ID': 'Transaction_Count'}).reset_index()
     return summary
+
