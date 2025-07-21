@@ -16,6 +16,19 @@ def init_db():
     conn.commit()
     conn.close()
 
+def add_currency_column():
+    conn = sqlite3.connect("receipts.db")
+    c = conn.cursor()
+    try:
+        c.execute("ALTER TABLE receipts ADD COLUMN currency TEXT")
+        print("Currency column added.")
+    except sqlite3.OperationalError as e:
+        print(f"Skipped: {e}")
+    conn.commit()
+    conn.close()
+
+add_currency_column()
+
 def insert_receipt(receipt):
     conn = sqlite3.connect("receipts.db")
     c = conn.cursor()
