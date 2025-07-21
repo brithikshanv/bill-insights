@@ -53,6 +53,16 @@ if st.checkbox("Show All"):
     df = pd.DataFrame(data, columns=["ID", "Vendor", "Date", "Amount", "Category"])
     st.dataframe(df, use_container_width=True)
 
+if st.checkbox("Enable Export"):
+    df = pd.DataFrame(fetch_all(), columns=["ID", "Vendor", "Date", "Amount", "Category", "Currency"])
+
+    export_format = st.selectbox("Select export format", ["CSV", "JSON"])
+    if export_format == "CSV":
+        st.download_button("Download CSV", df.to_csv(index=False), file_name="receipts.csv", mime="text/csv")
+    else:
+        st.download_button("Download JSON", df.to_json(orient="records", indent=2), file_name="receipts.json", mime="application/json")
+
+
 st.subheader("🔎 Search & Filter")
 q = st.text_input("Vendor search")
 if q:
