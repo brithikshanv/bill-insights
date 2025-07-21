@@ -26,4 +26,10 @@ def insert_receipt(receipt):
 
 def fetch_all():
     conn = sqlite3.connect("receipts.db")
-    return conn.execute("SELECT * FROM receipts").fetchall()
+    c = conn.cursor()
+    rows = c.execute("SELECT * FROM receipts").fetchall()
+    conn.close()
+    return rows
+
+
+
