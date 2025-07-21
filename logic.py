@@ -46,3 +46,15 @@ def get_monthly_trend():
     trend = df.groupby('month')['amount'].sum().reset_index()
     trend['moving_avg'] = trend['amount'].rolling(window=3).mean()
     return trend
+
+def get_monthly_summary():
+    rows = fetch_all()
+    df = pd.DataFrame(rows, columns=["ID", "Vendor", "Date", "Amount", "Category", "Currency"])
+    df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+    df = df.dropna()
+    df['Month'] = df['Date'].dt.to_period('M').astype(str)
+    summary = df.groupby('Month').agg({
+        'Amount': 'sum',
+        'ID': 'count'
+    }).rename(columns={'ID': 'Transaction_Count'}).reset_index()
+    return summary
