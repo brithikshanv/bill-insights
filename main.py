@@ -28,11 +28,14 @@ if file:
     date = st.text_input("Date", receipt.date)
     amount = st.number_input("Amount", value=receipt.amount)
     category = st.text_input("Category", receipt.category)
+    currency = st.text_input("Currency", receipt.currency)
+    
 
     receipt.vendor = vendor
     receipt.date = date
     receipt.amount = amount
     receipt.category = category
+    receipt.currency = currency
 
     st.json(receipt.dict())
 
@@ -43,7 +46,7 @@ if file:
 st.subheader("📊 Records")
 if st.checkbox("Show All"):
     data = fetch_all()
-    df = pd.DataFrame(data, columns=["ID", "Vendor", "Date", "Amount", "Category"])
+    df = pd.DataFrame(data, columns=["ID", "Vendor", "Date", "Amount", "Category", "Currency"])
     st.dataframe(df, use_container_width=True)
 
 selected_category = st.selectbox(" Filter by Category", CATEGORIES)
