@@ -51,5 +51,48 @@ The **Bill Management System** is a full-stack application built with Python, St
 
 ---
 
+## File Structure
 
+bill-management-system/
+├── app.py # Streamlit application
+├── db.py # SQLite database setup and access
+├── models.py # Pydantic models for validation
+├── logic.py # Search, sort, aggregate, monthly summary
+├── parser.py # Rule-based text and date parsing
+├── ocr_utils.py # OCR logic for image/pdf
+├── requirements.txt
+└── README.md
+
+---
+
+## Setup Instructions
+
+### 1. Clone the repository
+
+git clone: https://github.com/your-username/bill-management-system.git
+
+cd bill-management-system
+
+### 2. Set up a virtual environment (optional)
+
+python -m venv env
+
+source env/bin/activate  
+
+### 3. Install dependencies
+
+pip install -r requirements.txt
+
+### 4. Run the app
+
+streamlit run main.py
+
+
+## Conclusion
+
+The Bill Management System is designed to be a practical and efficient tool for managing, categorizing, and analyzing bills and receipts in one place. It brings together OCR, data parsing, validation, and interactive visualizations into a streamlined, user-friendly application.
+
+Whether you're managing personal expenses, analyzing vendor trends, or preparing financial summaries, this system can serve as a solid foundation. Contributions and enhancements are welcome to help improve and extend its capabilities.
+
+For any issues or feature requests, feel free to open an issue or submit a pull request.
 
