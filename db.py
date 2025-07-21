@@ -9,7 +9,8 @@ def init_db():
             vendor TEXT,
             date TEXT,
             amount REAL,
-            category TEXT
+            category TEXT,
+            currency TEXT
         )
     ''')
     conn.commit()
@@ -18,8 +19,8 @@ def init_db():
 def insert_receipt(receipt):
     conn = sqlite3.connect("receipts.db")
     c = conn.cursor()
-    c.execute("INSERT INTO receipts (vendor, date, amount, category) VALUES (?, ?, ?, ?)",
-              (receipt.vendor, receipt.date, receipt.amount, receipt.category))
+    c.execute("INSERT INTO receipts (vendor, date, amount, category, currency) VALUES (?, ?, ?, ?, ?)",
+              (receipt.vendor, receipt.date, receipt.amount, receipt.category, receipt.currency))
     conn.commit()
     conn.close()
 
