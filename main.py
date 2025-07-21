@@ -50,7 +50,7 @@ if file:
 st.subheader("📊 Records")
 if st.checkbox("Show All"):
     data = fetch_all()
-    df = pd.DataFrame(data, columns=["ID", "Vendor", "Date", "Amount", "Category"])
+    df = pd.DataFrame(data, columns=["ID", "Vendor", "Date", "Amount", "Category"," Currency"])
     st.dataframe(df, use_container_width=True)
 
 if st.checkbox("Enable Export"):
@@ -67,13 +67,13 @@ st.subheader("🔎 Search & Filter")
 q = st.text_input("Vendor search")
 if q:
     result = search(q)
-    st.dataframe(pd.DataFrame(result, columns=["ID", "Vendor", "Date", "Amount", "Category"]))
+    st.dataframe(pd.DataFrame(result, columns=["ID", "Vendor", "Date", "Amount", "Category"," Currency"]))
 
 min_amt = st.number_input("Min Amount", 0.0)
 max_amt = st.number_input("Max Amount", 10000.0)
 if st.button("Range Search"):
     result = range_search(min_amt, max_amt)
-    st.dataframe(pd.DataFrame(result, columns=["ID", "Vendor", "Date", "Amount", "Category"]))
+    st.dataframe(pd.DataFrame(result, columns=["ID", "Vendor", "Date", "Amount", "Category", "Currency"]))
 
 st.subheader("🧠 Insights")
 agg = aggregate()
@@ -99,6 +99,20 @@ if not trend.empty:
     st.pyplot(fig)
 else:
     st.info("Not enough data for trend visualization.")
+
+from logic import get_monthly_summary
+
+st.subheader("Download Monthly Summary")
+monthly_summary = get_monthly_summary()
+if not monthly_summary.empty:
+    st.dataframe(monthly_summary)
+    st.download_button("Download Monthly Summary as CSV", 
+                       monthly_summary.to_csv(index=False), 
+                       file_name="monthly_summary.csv", 
+                       mime="text/csv")
+else:
+    st.info("Not enough data for monthly summary.")
+
 
 st.subheader("🥧 Category-wise Spend Distribution")
 
