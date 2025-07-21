@@ -5,7 +5,16 @@ from db import init_db, insert_receipt, fetch_all
 from logic import aggregate, sort_by, search, range_search, get_monthly_trend
 import matplotlib.pyplot as plt
 import pandas as pd
+import pytesseract
+from parser import map_category
 
+
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+CATEGORIES = [
+    "All", "Shopping", "Groceries", "Food & Delivery", "Electricity",
+    "Internet & Mobile", "Transportation", "Entertainment", "Hotels & Travel",
+    "Healthcare & Medical", "Education", "Finance & Payments", "Fuel", "Misc"
+]
 init_db()
 st.title("📁 BillInsight: Spend Analyzer")
 
@@ -37,11 +46,11 @@ if st.checkbox("Show All"):
     df = pd.DataFrame(data, columns=["ID", "Vendor", "Date", "Amount", "Category"])
     st.dataframe(df, use_container_width=True)
 
-st.subheader("🔎 Search & Filter")
-q = st.text_input("Vendor search")
-if q:
-    result = search(q)
-    st.dataframe(pd.DataFrame(result, columns=["ID", "Vendor", "Date", "Amount", "Category"]))
+selected_category = st.selectbox(" Filter by Category", CATEGORIES)
+
+if selected_category and selected_category != "All":
+    records = [r for r in fetch_all() if r[4] == selected_category]
+    st.dataframe(pd.DataFrame(records, columns=["ID", "Vendor", "Date", "Amount", "Category"]))
 
 min_amt = st.number_input("Min Amount", 0.0)
 max_amt = st.number_input("Max Amount", 10000.0)
