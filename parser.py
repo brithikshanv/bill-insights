@@ -26,15 +26,31 @@ def map_category(vendor: str) -> str:
 
     return "Misc"
 
+def detect_currency(text: str) -> str:
+    if "₹" in text:
+        return "INR"
+    elif "$" in text:
+        return "USD"
+    elif "€" in text:
+        return "EUR"
+    elif "£" in text:
+        return "GBP"
+    else:
+        return "Unknown"
+
 def parse_text(text: str) -> Receipt:
     vendor = re.search(r"(?i)(from|vendor):?\s*(.+)", text)
     amount = re.search(r"(?i)(total|amount):?\s*₹?\$?([\d,]+\.\d{2})", text)
     date = re.search(r"\d{2}[-/]\d{2}[-/]\d{4}", text)
+    currency = detect_currency(text)
 
     vendor_name = vendor.group(2).strip() if vendor else "Unknown"
     return Receipt(
         vendor=vendor_name,
         date=date.group() if date else "Unknown",
         amount=float(amount.group(2).replace(",", "")) if amount else 0.0,
-        category=map_category(vendor_name)
+        category=map_category(vendor_name),
+        currency=currency
     )
+
+
