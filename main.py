@@ -89,3 +89,14 @@ if not trend.empty:
     st.pyplot(fig)
 else:
     st.info("Not enough data for trend visualization.")
+
+st.subheader("🥧 Category-wise Spend Distribution")
+
+category_spend = agg.get("category_totals", {})
+if category_spend:
+    fig2, ax2 = plt.subplots()
+    ax2.pie(category_spend.values(), labels=category_spend.keys(), autopct="%1.1f%%", startangle=140)
+    ax2.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    st.pyplot(fig2)
+else:
+    st.info("No data available for category-wise distribution.")
