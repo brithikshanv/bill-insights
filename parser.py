@@ -1,5 +1,25 @@
 import re
 from models import Receipt
+from dateutil import parser as date_parser
+
+def extract_date(text: str) -> str:
+    # Try multiple date patterns
+    date_regexes = [
+        r"\d{2}[-/]\d{2}[-/]\d{4}",      # 19/07/2025 or 19-07-2025
+        r"\d{4}[-/]\d{2}[-/]\d{2}",      # 2025-07-19
+        r"[A-Za-z]{3,9}\s\d{1,2},\s\d{4}",  # July 19, 2025
+        r"\d{1,2}\s+[A-Za-z]{3,9}\s+\d{4}"  # 19 July 2025
+    ]
+    for pattern in date_regexes:
+        match = re.search(pattern, text)
+        if match:
+            try:
+                parsed = date_parser.parse(match.group())
+                return parsed.strftime("%d/%m/%Y")
+            except:
+                continue
+    return "Unknown"
+
 
 def map_category(vendor: str) -> str:
     vendor = vendor.lower()
@@ -41,16 +61,17 @@ def detect_currency(text: str) -> str:
 def parse_text(text: str) -> Receipt:
     vendor = re.search(r"(?i)(from|vendor):?\s*(.+)", text)
     amount = re.search(r"(?i)(total|amount):?\s*₹?\$?([\d,]+\.\d{2})", text)
-    date = re.search(r"\d{2}[-/]\d{2}[-/]\d{4}", text)
+    date = extract_date(text)
     currency = detect_currency(text)
 
     vendor_name = vendor.group(2).strip() if vendor else "Unknown"
     return Receipt(
         vendor=vendor_name,
-        date=date.group() if date else "Unknown",
+        date=date,
         amount=float(amount.group(2).replace(",", "")) if amount else 0.0,
         category=map_category(vendor_name),
         currency=currency
     )
+
 
 
