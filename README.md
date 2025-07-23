@@ -91,7 +91,6 @@ streamlit run main.py
 ## Conclusion
 
 The Bill Management System is designed to be a practical and efficient tool for managing, categorizing, and analyzing bills and receipts in one place. It brings together OCR, data parsing, validation, and interactive visualizations into a streamlined, user-friendly application.
-
 Whether you're managing personal expenses, analyzing vendor trends, or preparing financial summaries, this system can serve as a solid foundation. Contributions and enhancements are welcome to help improve and extend its capabilities.
 
 For any issues or feature requests, feel free to open an issue or submit a pull request.
