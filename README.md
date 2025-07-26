@@ -95,4 +95,3 @@ The Bill Management System is designed to be a practical and efficient tool for 
 Whether you're managing personal expenses, analyzing vendor trends, or preparing financial summaries, this system can serve as a solid foundation. Contributions and enhancements are welcome to help improve and extend its capabilities.
 
 For any issues or feature requests, feel free to open an issue or submit a pull request.
-
