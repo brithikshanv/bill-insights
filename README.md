@@ -51,20 +51,6 @@ The **Bill Management System** is a full-stack application built with Python, St
 
 ---
 
-## File Structure
-
-bill-management-system/
-├── app.py # Streamlit application
-├── db.py # SQLite database setup and access
-├── models.py # Pydantic models for validation
-├── logic.py # Search, sort, aggregate, monthly summary
-├── parser.py # Rule-based text and date parsing
-├── ocr_utils.py # OCR logic for image/pdf
-├── requirements.txt
-└── README.md
-
----
-
 ## Setup Instructions
 
 ### 1. Clone the repository
